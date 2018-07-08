@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\JsonResponse;
 use App\Service\Database;
+use App\Repository\TaskRepository;
 
 class TaskController
 {
@@ -14,17 +15,22 @@ class TaskController
     {
         $this->jsonResponse = new JsonResponse();
         $this->db = new Database();
+        $this->repository = new TaskRepository($this->db);
     }
 
     /**
      * Get all tasks
      *
-     * Route: /task or /task/$page
+     * Route: /task
      * Method: GET
      */
-    public function getAll($page = 1)
+    public function getAll()
     {
-        print $this->jsonResponse->create([], 200);
+        $code = 200;
+        $message = "Here are the tasks!";
+        $data = $this->repository->findAll();
+
+        print $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -35,13 +41,13 @@ class TaskController
      */
     public function get($id)
     {
-        $code = 200;
-        $data = [];
+        $data = $this->repository->findOneById($id) ?? [];
+        $code = ($data != null) ? 200 : 404;
+        $message = ($data != null) ? "Task found." : "Task not found.";
 
-        print $this->jsonResponse->create([
-            'code' => $code,
-            'data' => $data
-        ], $code);
+        //var_dump($data);
+
+        print $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -53,12 +59,10 @@ class TaskController
     public function post()
     {
         $code = 200;
+        $message = "";
         $data = [];
 
-        print $this->jsonResponse->create([
-            'code' => $code,
-            'data' => $data
-        ], $code);
+        print $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -70,12 +74,10 @@ class TaskController
     public function put($id)
     {
         $code = 200;
+        $message = "";
         $data = [];
 
-        print $this->jsonResponse->create([
-            'code' => $code,
-            'data' => $data
-        ], $code);
+        print $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -87,11 +89,9 @@ class TaskController
     public function delete($id)
     {
         $code = 200;
+        $message = "";
         $data = [];
 
-        print $this->jsonResponse->create([
-            'code' => $code,
-            'data' => $data
-        ], $code);
+        print $this->jsonResponse->create($code, $message, $data);
     }
 }
