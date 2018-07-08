@@ -18,10 +18,7 @@ class DefaultController
      */
     public function index()
     {
-        print $this->jsonResponse->create([
-            'code' => 200,
-            'message' => 'Hello! :)'
-        ], 200);
+        print $this->jsonResponse->create(200, 'Hello! :)');
     }
 
     /**
@@ -29,9 +26,6 @@ class DefaultController
      */
     public function error()
     {
-        print $this->jsonResponse->create([
-            'code' => 404,
-            'message' => 'Resource not found.'
-        ], 404);
+        print $this->jsonResponse->create(404, 'Resource not found.');
     }
 }
