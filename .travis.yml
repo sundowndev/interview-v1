@@ -1,0 +1,19 @@
+language: php
+sudo: false
+cache:
+  directories:
+  - "$HOME/.composer/cache/files"
+matrix:
+  fast_finish: true
+  include:
+  - php: 7.2
+  - php: 7.1
+before_install:
+- phpenv config-rm xdebug.ini
+- composer self-update
+install:
+- cd $TRAVIS_BUILD_DIR/server && composer install
+- cd $TRAVIS_BUILD_DIR/server && composer update
+- cd $TRAVIS_BUILD_DIR/client && yarn install
+script:
+- composer validate --strict
