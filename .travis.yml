@@ -1,6 +1,10 @@
 sudo: required
 
 language: php
+matrix:
+  fast_finish: true
+  include:
+  - php: 7.2
 
 services:
   - docker
@@ -10,4 +14,5 @@ install:
 - docker-compose up -d
 
 script:
-- cd $TRAVIS_BUILD_DIR/server && composer validate --strict
+- docker exec interview-v1_server_1 /bin/sh -c 'compose update'
+- docker exec interview-v1_server_1 /bin/sh -c 'compose validate --strict'
