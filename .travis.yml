@@ -1,19 +1,13 @@
+sudo: required
+
 language: php
-sudo: false
-cache:
-  directories:
-  - "$HOME/.composer/cache/files"
-matrix:
-  fast_finish: true
-  include:
-  - php: 7.2
-  - php: 7.1
-before_install:
-- phpenv config-rm xdebug.ini
-- composer self-update
+
+services:
+  - docker
+  
 install:
-- cd $TRAVIS_BUILD_DIR/server && composer install
-- cd $TRAVIS_BUILD_DIR/server && composer update
-- cd $TRAVIS_BUILD_DIR/client && yarn install
+- docker-compose build
+- docker-compose up -d
+
 script:
 - cd $TRAVIS_BUILD_DIR/server && composer validate --strict
