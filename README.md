@@ -1,6 +1,6 @@
 # interview-v1
 
-![](https://api.travis-ci.org/Sundowndev/interview-v1.svg?branch=master)
+![](https://api.travis-ci.org/Sundowndev/interview-v1.svg)
 
 ## Description
 
