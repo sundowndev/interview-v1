@@ -1,5 +1,7 @@
 # interview-v1
 
+![](https://api.travis-ci.org/Sundowndev/interview-v1.svg?branch=master)
+
 ## Description
 
 1/ Développer en PHP une mini API REST avec output en json
