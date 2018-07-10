@@ -14,5 +14,5 @@ install:
 - docker-compose up -d
 
 script:
-- docker exec interviewv1_server_1 /bin/sh -c 'compose update'
-- docker exec interviewv1_server_1 /bin/sh -c 'compose validate --strict'
+- docker exec interviewv1_server_1 /bin/sh -c 'composer update'
+- docker exec interviewv1_server_1 /bin/sh -c 'composer validate --strict'
