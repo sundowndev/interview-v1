@@ -16,4 +16,4 @@ install:
 - cd $TRAVIS_BUILD_DIR/server && composer update
 - cd $TRAVIS_BUILD_DIR/client && yarn install
 script:
-- composer validate --strict
+- cd $TRAVIS_BUILD_DIR/server && composer validate --strict
