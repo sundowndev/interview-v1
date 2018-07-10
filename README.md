@@ -41,8 +41,25 @@ You can now browse the front app at `localhost:3000` and the API at `localhost:8
 
 ## Architecture
 
+The architecture is made of a simple client -> server communication using Docker containers.
+
+<p align="center">
+ <img src="https://i.imgur.com/9EG2rso.png" alt="">
+</p>
+
 ## Database
 
 ## Security
 
 ## API endpoints
+
+| Method / Route        | Resource           | Description  |
+| --------------------- | ------------------ | ------------ |
+| `POST` /auth      | Authentification | Connect and get an api key |
+| `GET` /tasks      | Task      |   Get latest taks |
+| `GET` /tasks/{id} | Task      |    Get a task by given id |
+| `POST` /tasks | Task      |    Create a task |
+| `PUT` /tasks/{id} | Task      |    Update a task by given id |
+| `DELETE` /tasks/{id} | Task      |    Delete a task by given id |
+| `GET` /me | Users      |    Get your own account data |
+| `GET` /users/{id}/tasks | Users,Tasks      |    Get tasks from a given user id |
