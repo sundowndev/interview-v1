@@ -1,7 +1,11 @@
 {
+  "name": "sundowndev/interview-v1",
+  "description": "Web application based on a client-server architecture for job interviews.",
+  "type": "project",
+  "license": "MIT",
   "require": {
     "bramus/router": "~1.3",
-    "josegonzalez/dotenv": "dev-master"
+    "josegonzalez/dotenv": "~3.2.0"
   },
   "autoload": {
     "psr-4": {
