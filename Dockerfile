@@ -34,12 +34,14 @@ CMD ["php-fpm"]
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Use prestissimo to speed up builds
-RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative  --no-interaction
-
 ###> recipes ###
 ###< recipes ###
 
 COPY ./server .
 
+# Use prestissimo to speed up builds
+RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative  --no-interaction
+
 RUN composer install
+
+RUN echo $(cat .env.dist) > .env
