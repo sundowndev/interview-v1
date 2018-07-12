@@ -5,23 +5,33 @@ namespace App\Controller;
 use App\Service\JsonResponse;
 use App\Service\Database;
 use App\Repository\TaskRepository;
+use App\Service\Security;
+use App\Service\Session;
 
+/**
+ * Class TaskController
+ * @package App\Controller
+ */
 class TaskController
 {
-    private $jsonResponse;
     private $db;
+    private $jsonResponse;
+    private $session;
+    private $security;
 
     public function __construct()
     {
-        $this->jsonResponse = new JsonResponse();
         $this->db = new Database();
+        $this->jsonResponse = new JsonResponse();
         $this->repository = new TaskRepository($this->db);
+        $this->session = new Session();
+        $this->security = new Security();
     }
 
     /**
      * Get all tasks
      *
-     * Route: /task
+     * Route: /tasks
      * Method: GET
      */
     public function getAll()
@@ -36,7 +46,7 @@ class TaskController
     /**
      * Get all tasks
      *
-     * Route: /task/$id
+     * Route: /tasks/$id
      * Method: GET
      */
     public function get($id)
@@ -45,22 +55,46 @@ class TaskController
         $code = ($data != null) ? 200 : 404;
         $message = ($data != null) ? "Task found." : "Task not found.";
 
-        //var_dump($data);
-
         print $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
      * Create a task
      *
-     * Route: /task
+     * Route: /tasks
      * Method: POST
      */
     public function post()
     {
+        if ($this->security->isLogged($_COOKIE['session'])) {
+            $code = 403;
+            $message = 'You are not authentified.';
+            $data = [];
+
+            print $this->jsonResponse->create($code, $message, $data);
+            exit();
+        }
+
+        if (empty($_POST['title']) || empty($_POST['description'])) {
+            $code = 400;
+            $message = 'Bad parameters.';
+            $data = [];
+
+            print $this->jsonResponse->create($code, $message, $data);
+            exit();
+        }
+
+        $task = $this->repository->create([
+            'user_id' => 1,
+            'title' => $_POST['title'],
+            'description' => $_POST['description'],
+            'creation_date' =>  new \DateTime(),
+            'status' => 1
+        ]);
+
         $code = 200;
-        $message = "";
-        $data = [];
+        $message = 'Success!';
+        $data = $task;
 
         print $this->jsonResponse->create($code, $message, $data);
     }
@@ -68,7 +102,7 @@ class TaskController
     /**
      * Update a task
      *
-     * Route: /task/$id
+     * Route: /tasks/$id
      * Method: PUT
      */
     public function put($id)
@@ -83,13 +117,19 @@ class TaskController
     /**
      * Delete a task
      *
-     * Route: /task/$id
+     * Route: /tasks/$id
      * Method: DELETE
      */
     public function delete($id)
     {
+        //verify auth
+        //verify csrf
+        //verify if author
+
+        $this->repository->deleteById($id);
+
         $code = 200;
-        $message = "";
+        $message = "Task deleted.";
         $data = [];
 
         print $this->jsonResponse->create($code, $message, $data);
