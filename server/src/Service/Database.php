@@ -2,11 +2,18 @@
 
 namespace App\Service;
 
+/**
+ * Class Database
+ * @package App\Service
+ */
 class Database
 {
     private $dotEnvParser;
     private $conn;
 
+    /**
+     * Database constructor.
+     */
     public function __construct()
     {
         $this->dotEnvParser = new DotEnvParser();
@@ -29,13 +36,18 @@ class Database
         }
     }
 
+    /**
+     * Get the PDO connection instance
+     *
+     * @return \PDO
+     */
     public function getConnection()
     {
         return $this->conn;
     }
 
     /**
-     * gestion des erreurs de retour d'execution de PDO
+     * Handle PDO execution errors
      * @param PDOStatement $stmt
      * @return void
      */

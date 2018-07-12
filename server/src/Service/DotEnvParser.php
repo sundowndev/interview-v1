@@ -4,6 +4,10 @@ namespace App\Service;
 
 use josegonzalez\Dotenv\Loader;
 
+/**
+ * Class DotEnvParser
+ * @package App\Service
+ */
 class DotEnvParser
 {
     private $file;

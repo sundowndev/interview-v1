@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+/**
+ * Class JsonResponse
+ * @package App\Service
+ */
 class JsonResponse
 {
     public function create(int $code, string $message = null, array $data = [])
