@@ -5,7 +5,7 @@ use App\Service\JsonResponse;
 
 $router->setNamespace('\App\Controller');
 
-$router->before('GET|POST', '/.*', function () use ($router) {
+$router->before('GET|POST|PUT|DELETE', '/.*', function () use ($router) {
     # This will be always executed
     $dotEnvParser = new DotEnvParser();
     $dotEnvParser->run();
@@ -16,17 +16,17 @@ $router->before('GET|POST', '/.*', function () use ($router) {
         $code = 400;
         $message = 'Accept header is not set to "application/json".';
         print $jsonResponse->create($code, $message, []);
-        die();
+        exit();
     } elseif ($_SERVER['REQUEST_METHOD'] != 'GET' && $_SERVER['CONTENT_TYPE'] !== 'application/json') {
         $code = 400;
         $message = 'Content-type header is not set to "application/json".';
         print $jsonResponse->create($code, $message, []);
-        die();
-    }/*elseif($_SERVER['HTTP_ORIGIN'] !== getenv('ALLOW_ORIGIN')) {
+        exit();
+    }/* elseif ($_SERVER['HTTP_ORIGIN'] !== getenv('ALLOW_ORIGIN')) {
         $code = 403;
-        $message = 'Unallowed cross origin.';
+        $message = 'Unallowed origin.';
         print $jsonResponse->create($code, $message, []);
-        die();
+        exit();
     }*/
 });
 
