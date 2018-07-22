@@ -14,11 +14,23 @@ class Security
     private $session;
 
     /**
+     * @var JsonResponse
+     */
+    private $jsonResponse;
+
+    /**
+     * @var $secret_key
+     */
+    private $secret_key;
+
+    /**
      * Security constructor.
      */
-    public function __construct()
+    public function __construct(Session $session, JsonResponse $jsonResponse)
     {
-        $this->session = new Session();
+        $this->session = $session;
+        $this->jsonResponse = $jsonResponse;
+        $this->secret_key = getenv('APP_SECRET');
     }
 
     /**
@@ -35,27 +47,21 @@ class Security
      * @param $cookie
      * @return bool
      */
-    public function isLogged($cookie)
+    public function isLogged()
     {
-        if (is_null($this->session->getSession($cookie))) {
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 
     /**
-     * @param $csrf
-     * @param $cookie
-     * @return bool
+     * @return string
      */
-    public function isValidCsrf($csrf, $cookie)
+    public function NotAllowedRequest()
     {
-        if (is_null($session = $this->session->getSession($cookie))) {
-            return false;
-        }
+        $code = 403;
+        $message = 'You are not allowed to perform this request.';
+        $data = [];
 
-        return $session['csrf'] === $csrf;
+        return $this->jsonResponse->create($code, $message, $data);
     }
 
     /**

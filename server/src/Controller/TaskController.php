@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Service\JsonResponse;
 use App\Service\Database;
 use App\Repository\TaskRepository;
-use App\Service\Security;
+use App\Service\Request;
 use App\Service\Session;
 
 /**
@@ -15,17 +15,20 @@ use App\Service\Session;
 class TaskController
 {
     private $db;
+    private $request;
     private $jsonResponse;
     private $session;
     private $security;
+    private $repository;
 
     public function __construct()
     {
         $this->db = new Database();
+        $this->request = new Request();
         $this->jsonResponse = new JsonResponse();
         $this->repository = new TaskRepository($this->db);
-        $this->session = new Session();
-        $this->security = new Security();
+        $this->session = new Session($this->db, $this->jsonResponse);
+        $this->security = $this->session->security;
     }
 
     /**
@@ -44,7 +47,7 @@ class TaskController
     }
 
     /**
-     * Get all tasks
+     * Get task by id
      *
      * Route: /tasks/$id
      * Method: GET
@@ -66,29 +69,25 @@ class TaskController
      */
     public function post()
     {
-        if ($this->security->isLogged($_COOKIE['session'])) {
-            $code = 403;
-            $message = 'You are not authentified.';
-            $data = [];
-
-            print $this->jsonResponse->create($code, $message, $data);
+        if (!$this->security->isLogged()) {
+            print $this->security->NotAllowedRequest();
             exit();
         }
 
-        if (empty($_POST['title']) || empty($_POST['description'])) {
+        $content = $this->request->getContentAsArray();
+
+        if (empty($content['title']) || empty($content['description'])) {
             $code = 400;
             $message = 'Bad parameters.';
-            $data = [];
 
-            print $this->jsonResponse->create($code, $message, $data);
+            print $this->jsonResponse->create($code, $message);
             exit();
         }
 
         $task = $this->repository->create([
             'user_id' => 1,
-            'title' => $_POST['title'],
-            'description' => $_POST['description'],
-            'creation_date' =>  new \DateTime(),
+            'title' => $content['title'],
+            'description' => $content['description'],
             'status' => 1
         ]);
 
@@ -122,9 +121,17 @@ class TaskController
      */
     public function delete($id)
     {
-        //verify auth
-        //verify csrf
-        //verify if author
+        if (!$this->security->isLogged()) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
+
+        $task = $this->repository->findOneById($id);
+
+        if ($task['user_id'] !== 1) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
 
         $this->repository->deleteById($id);
 

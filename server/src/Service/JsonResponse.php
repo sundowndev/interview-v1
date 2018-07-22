@@ -16,6 +16,8 @@ class JsonResponse
             'data' => $data
         ];
 
+        header('Access-Control-Allow-Origin: ' . getenv('ALLOW_ORIGIN'));
+        header('Accept: application/json');
         header('Content-Type: application/json');
         http_response_code($code);
 
