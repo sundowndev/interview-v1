@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repository;
-use App\Service\Database;
 
 /**
  * Class TaskRepository
@@ -13,6 +12,7 @@ class TaskRepository
      * @var Database
      */
     private $db;
+
     /**
      * @var
      */
@@ -64,11 +64,10 @@ class TaskRepository
      */
     public function create($data)
     {
-        $stmt = $this->db->getConnection()->prepare('INSERT INTO ' . $this->tableName . ' (user_id, title, description, creation_date, status) VALUES(:user_id, :title, :description, :creation_date, :status)');
+        $stmt = $this->db->getConnection()->prepare('INSERT INTO ' . $this->tableName . ' (user_id, title, description, creation_date, status) VALUES(:user_id, :title, :description, NOW(), :status)');
         $stmt->bindParam(':user_id', $data['user_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':title', $data['title'], \PDO::PARAM_STR);
         $stmt->bindParam(':description', $data['description'], \PDO::PARAM_STR);
-        $stmt->bindParam(':creation_date', $data['creation_date']);
         $stmt->bindParam(':status', $data['status'], \PDO::PARAM_INT);
         $stmt->execute();
 
