@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "759257fb9b4837a4e886866e36a4c233",
+    "content-hash": "4ac0df3751e41700bc67b558c17957c9",
     "packages": [
         {
             "name": "bramus/router",
@@ -53,88 +53,29 @@
             "time": "2017-12-21T20:37:23+00:00"
         },
         {
-            "name": "josegonzalez/dotenv",
-            "version": "dev-master",
+            "name": "codervio/envmanager",
+            "version": "1.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/josegonzalez/php-dotenv.git",
-                "reference": "bc1677b827829f1e1db4a55b8283b4b836617499"
+                "url": "https://github.com/Codervio/Envmanager.git",
+                "reference": "6b74977f2a048fd2afac144032ccda2808ed2acb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/josegonzalez/php-dotenv/zipball/bc1677b827829f1e1db4a55b8283b4b836617499",
-                "reference": "bc1677b827829f1e1db4a55b8283b4b836617499",
+                "url": "https://api.github.com/repos/Codervio/Envmanager/zipball/6b74977f2a048fd2afac144032ccda2808ed2acb",
+                "reference": "6b74977f2a048fd2afac144032ccda2808ed2acb",
                 "shasum": ""
             },
             "require": {
-                "m1/env": "2.*",
-                "php": ">=5.5.0"
+                "php": "^7.0"
             },
             "require-dev": {
-                "php-mock/php-mock-phpunit": "^1.1",
-                "satooshi/php-coveralls": "1.*",
-                "squizlabs/php_codesniffer": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "josegonzalez\\Dotenv": [
-                        "src",
-                        "tests"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jose Diaz-Gonzalez",
-                    "email": "dotenv@josegonzalez.com",
-                    "homepage": "http://josediazgonzalez.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "dotenv file parsing for PHP",
-            "homepage": "https://github.com/josegonzalez/php-dotenv",
-            "keywords": [
-                "configuration",
-                "dotenv",
-                "php"
-            ],
-            "time": "2017-11-27T14:55:32+00:00"
-        },
-        {
-            "name": "m1/env",
-            "version": "2.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/m1/Env.git",
-                "reference": "294addeedf15e1149eeb96ec829f2029d2017d39"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/m1/Env/zipball/294addeedf15e1149eeb96ec829f2029d2017d39",
-                "reference": "294addeedf15e1149eeb96ec829f2029d2017d39",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "scrutinizer/ocular": "~1.1",
-                "squizlabs/php_codesniffer": "^2.3"
-            },
-            "suggest": {
-                "josegonzalez/dotenv": "For loading of .env",
-                "m1/vars": "For loading of configs"
+                "phpunit/phpunit": "6.0.*"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "M1\\Env\\": "src"
+                    "Codervio\\Envmanager\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -143,33 +84,38 @@
             ],
             "authors": [
                 {
-                    "name": "Miles Croxford",
-                    "email": "hello@milescroxford.com",
-                    "homepage": "http://milescroxford.com",
-                    "role": "Developer"
+                    "name": "Marin Sagovac",
+                    "email": "marin@sagovac.com"
+                },
+                {
+                    "name": "Codervio Community",
+                    "homepage": "http://codervio.com"
                 }
             ],
-            "description": "Env is a lightweight library bringing .env file parser compatibility to PHP. In short - it enables you to read .env files with PHP.",
-            "homepage": "https://github.com/m1/Env",
+            "description": "Codervio Environment manager",
+            "homepage": "http://codervio.com",
             "keywords": [
                 ".env",
+                "array-env",
                 "config",
+                "dev-tools",
+                "dot-env",
                 "dotenv",
+                "dotenv-editor",
                 "env",
+                "environment",
+                "framework",
                 "loader",
-                "m1",
                 "parser",
-                "support"
+                "php"
             ],
-            "time": "2018-06-19T18:55:08+00:00"
+            "time": "2018-03-07T23:55:50+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "josegonzalez/dotenv": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
