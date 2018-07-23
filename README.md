@@ -49,13 +49,15 @@ The architecture is made of a simple client -> server communication using Docker
 
 ## Security
 
-To handle authentication feature, we use a CSRF and a http-only session cookie.
+To handle authentication feature, we use JWT authentication.
 
-As soon as the user provide valid credentials, we return a two tokens that will be needed for each request he will send to the API.
+JSON Web Token (JWT) is an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA. [Source](https://jwt.io/introduction/)
 
-For each request, the user send the CSRF token as GET/POST/DELETE/PUT parameter. The cookie is sent automatically.
+As soon as the user provide valid credentials, we return a JWT token that will be needed for each request the client will send to the API.
 
-**Technical user story:** the user provide an username and password as POST parameter to /auth route. The credentials are checked in the database and if it's valid it returns a CSRF token and a token for the session cookie. The session is also stored in the database so at every client request, both tokens are checked and we can also identify the user through his tokens.
+For each request, the user send the JWT token as parameter.
+
+![JWT explained](https://cdn-images-1.medium.com/max/1400/1*SSXUQJ1dWjiUrDoKaaiGLA.png)
 
 ## API endpoints
 
