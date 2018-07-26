@@ -81,14 +81,11 @@ class TaskRepository
      */
     public function updateById($id, $data)
     {
-        $task = $this->findOneById($id);
-
-        $stmt = $this->db->getConnection()->prepare('UPDATE ' . $this->tableName . ' SET user_id = :user_id, title = :title, description = :description, creation_date = :creation_date, status = :status');
-        $stmt->bindParam(':user_id', $data['user_id'] ?? $task['user_id'], \PDO::PARAM_INT);
-        $stmt->bindParam(':title', $data['title'] ?? $task['title'], \PDO::PARAM_STR);
-        $stmt->bindParam(':description', $data['description'] ?? $task['description'], \PDO::PARAM_STR);
-        $stmt->bindParam(':creation_date', $data['creation_date'] ?? $task['creation_date']);
-        $stmt->bindParam(':status', $data['status'] ?? $task['status'], \PDO::PARAM_INT);
+        $stmt = $this->db->getConnection()->prepare('UPDATE ' . $this->tableName . ' SET title = :title, description = :description, status = :status WHERE id = :id');
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        $stmt->bindParam(':title', $data['title'], \PDO::PARAM_STR);
+        $stmt->bindParam(':description', $data['description'], \PDO::PARAM_STR);
+        $stmt->bindParam(':status', $data['status'], \PDO::PARAM_INT);
         $stmt->execute();
 
         return $data;

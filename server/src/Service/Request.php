@@ -8,8 +8,20 @@ namespace App\Service;
  */
 class Request
 {
-    public function getContentAsArray()
+    private $content;
+
+    public function getContent()
     {
-        return $content = json_decode(trim(file_get_contents("php://input")), true) ?? [];
+        $this->content = trim(file_get_contents("php://input")) ?? [];
+
+        return $this;
+    }
+
+    public function asPlainText(){
+        return (string) $this->content;
+    }
+
+    public function jsonToArray(){
+        return json_decode($this->content, true);
     }
 }
