@@ -5,16 +5,13 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP DATABASE IF EXISTS `app1`;
-CREATE DATABASE `app1` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `app1`;
-
 DROP TABLE IF EXISTS `Session`;
 CREATE TABLE `Session` (
   `user_id` int(11) NOT NULL,
   `token` varchar(255) NOT NULL,
   `issued_at` datetime NOT NULL,
-  `expire_at` datetime NOT NULL
+  `expire_at` datetime NOT NULL,
+  `ip_address` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -41,4 +38,4 @@ CREATE TABLE `User` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2018-07-22 00:34:19
+-- 2018-07-26 15:21:32
