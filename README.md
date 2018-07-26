@@ -12,12 +12,12 @@ This api must manage 2 objects :
 
 Create API endpoints to recover a user or task data. (e.g /user/{id})
 
-L'api doit être capable de manipuler la liste des taches associées à un utilisateur en offrant la possibilité de:
+The API must be able to manage users tasks and create the endpoints to:
 - Fetch the latest tasks
 - Create a task
 - Delete a task
 
-En développant cette API, vous devez garder en tête qu'elle est susceptible d'évoluer (nouveaux retours, nouveaux attributs dans les objets)
+While developing this API, you must keep in mind it can evolve at any moment (new resources, new properties in objects ...).
 
 2/ Create a frontend client to call the API
 
