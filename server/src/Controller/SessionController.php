@@ -54,7 +54,7 @@ class SessionController
         $expire_at = new \DateTime();
         $expire_at->modify('+1 Day'); // Expire in 1 day
 
-        $this->sessionRepository->create($user['id'], $token, $expire_at->format('Y-m-d H:i:s'));
+        $this->sessionRepository->create($user['id'], $token, $expire_at->format('Y-m-d H:i:s'), $_SERVER['REMOTE_ADDR']);
 
         print $this->jsonResponse->create(200, 'Welcome ' . $user['name'], [
             'token' => $token,
@@ -62,7 +62,7 @@ class SessionController
         ]);
     }
 
-    /**db
+    /**
      * Register route
      */
     public function signup()
