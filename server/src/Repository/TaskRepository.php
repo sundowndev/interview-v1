@@ -58,6 +58,20 @@ class TaskRepository
         }
     }
 
+    public function findByUserId($userId){
+        $stmt = $this->db->getConnection()->prepare('SELECT * FROM ' . $this->tableName . ' WHERE user_id = :user_id');
+        $stmt->bindParam(':user_id', $userId, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $task = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (!$task) {
+            return null;
+        } else {
+            return $task;
+        }
+    }
+
     /**
      * @param $data
      * @return mixed

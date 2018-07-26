@@ -72,13 +72,9 @@ $router->mount('/tasks', function () use ($router) {
  * User resource
  */
 $router->mount('/users', function () use ($router) {
-    // Create user (register)
-    $router->post('/', 'DefaultController@index');
-
     // Get one user
-    $router->get('/(\d+)', 'DefaultController@index');
+    $router->get('/(\d+)', 'UserController@get');
 
     // Get one task's tasks
-    $router->get('/(\d+)/tasks', 'DefaultController@index');
+    $router->get('/(\d+)/tasks', 'UserController@getTasks');
 });
-
