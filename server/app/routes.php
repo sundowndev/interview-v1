@@ -36,11 +36,17 @@ $router->before('GET|POST|PUT|DELETE', '/.*', function () use ($router) {
 $router->get('/', 'DefaultController@index');
 
 /**
+ * 404 error response
+ */
+$router->set404('DefaultController@error');
+
+/**
  * Session handling routes
  */
 $router->post('/auth', 'SessionController@auth');
-$router->post('/register', 'SessionController@signup');
+$router->post('/signup', 'SessionController@signup');
 $router->post('/logout', 'SessionController@signout');
+$router->get('/me', 'SessionController@me');
 
 /**
  * Task resource
@@ -69,9 +75,6 @@ $router->mount('/users', function () use ($router) {
     // Create user (register)
     $router->post('/', 'DefaultController@index');
 
-    // Get your own account data
-    $router->get('/me', 'DefaultController@index');
-
     // Get one user
     $router->get('/(\d+)', 'DefaultController@index');
 
@@ -79,7 +82,3 @@ $router->mount('/users', function () use ($router) {
     $router->get('/(\d+)/tasks', 'DefaultController@index');
 });
 
-/**
- * 404 error response
- */
-$router->set404('DefaultController@error');
