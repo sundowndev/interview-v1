@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+/**
+ * Class JsonResponse
+ * @package App\Service
+ */
 class JsonResponse
 {
     public function create(int $code, string $message = null, array $data = [])
@@ -12,6 +16,8 @@ class JsonResponse
             'data' => $data
         ];
 
+        header('Access-Control-Allow-Origin: ' . getenv('ALLOW_ORIGIN'));
+        header('Accept: application/json');
         header('Content-Type: application/json');
         http_response_code($code);
 

@@ -7,7 +7,7 @@ services:
       - "3311:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mysql
+      MYSQL_DATABASE: app1
       MYSQL_USER: mysql
       MYSQL_PASSWORD: mysql
 
@@ -42,3 +42,10 @@ services:
       - ./docker/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
     ports:
       - '443:443'
+
+  # For development purposes
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

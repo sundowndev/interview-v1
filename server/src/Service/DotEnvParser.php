@@ -2,42 +2,27 @@
 
 namespace App\Service;
 
-use josegonzalez\Dotenv\Loader;
+use Codervio\Envmanager\Envparser;
 
+/**
+ * Class DotEnvParser
+ * @package App\Service
+ */
 class DotEnvParser
 {
     private $file;
-    private $loader;
+    private $parser;
 
     public function __construct()
     {
         $this->file = __DIR__ . '/../../.env';
-        $this->loader = new Loader($this->file);
+
+        $this->parser = new Envparser($this->file);
+        $this->parser->load();
     }
 
-    /**
-     * Parse the .env file
-     * @return bool|Loader
-     */
-    public function parse()
+    public function run()
     {
-        return $this->loader->parse();
-    }
-
-    /**
-     * Send the parsed .env file to the $_ENV variable
-     * @return bool|Loader
-     */
-    public function toEnv()
-    {
-        return $this->loader->toEnv();
-    }
-
-    /**
-     * @return array|null
-     */
-    public function toArray()
-    {
-        return $this->loader->toArray();
+        $this->parser->run();
     }
 }

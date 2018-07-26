@@ -1,33 +1,31 @@
 # interview-v1
 
-![](https://api.travis-ci.org/Sundowndev/interview-v1.svg)
+Build status : ![](https://api.travis-ci.org/Sundowndev/interview-v1.svg)
 
 ## Description
 
-1/ Développer en PHP une mini API REST avec output en json
+1/ Develop a mini PHP REST API with json output
 
-Cette api doit:
+This api must manage 2 objects :
+- User (id, name, email)
+- Task (id, user_id, title, description, creation_date, status)
 
- - Gérer 2 types d'objets:
-    User (id, name, email)
-    Task (id, user_id, title, description, creation_date, status)
+Create API endpoints to recover a user or task data. (e.g /user/{id})
 
- - Mettre à disposition des endpoints permettant de récupérer les données d'un user et d'une task. (ex: /user/$id)
+The API must be able to manage users tasks and create the endpoints to:
+- Fetch the latest tasks
+- Create a task
+- Delete a task
 
- - L'api doit être capable de manipuler la liste des taches associées à un utilisateur en offrant la possibilité de:
-    Récupérer cette liste de taches
-    Créer et ajouter une nouvelle tache
-    Supprimer une tache
+While developing this API, you must keep in mind it can evolve at any moment (new resources, new properties in objects ...).
 
-En développant cette API, vous devez garder en tête qu'elle est susceptible d'évoluer (nouveaux retours, nouveaux attributs dans les objets)
+2/ Create a frontend client to call the API
 
-2/ Développer un front en HtML/JS/CSS (pas de design nécessaire)
+- The client must call the api using ajax
+- We must be able to create/delete an user
+- Manage user's tasks (read / add / delete)
 
-Ce front doit communiquer avec l'api en ajax.
-On doit pouvoir ajouter/supprimer un utilisateur
-Gérer la liste des tâches d'un utilisateur (liste / ajout / suppression)
-
-(pas de framework)
+(no framework)
 
 ## Installation and usage
 
@@ -51,11 +49,21 @@ The architecture is made of a simple client -> server communication using Docker
 
 ## Security
 
+To handle authentication feature, we use JWT authentication.
+
+JSON Web Token (JWT) is an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA. [Source](https://jwt.io/introduction/)
+
+As soon as the user provide valid credentials, we return a JWT token that will be needed for each request the client will send to the API.
+
+For each request, the user send the JWT token as parameter.
+
+![JWT explained](https://cdn-images-1.medium.com/max/1400/1*SSXUQJ1dWjiUrDoKaaiGLA.png)
+
 ## API endpoints
 
 | Method / Route        | Resource           | Description  |
 | --------------------- | ------------------ | ------------ |
-| `POST` /auth      | Authentification | Connect and get an api key |
+| `POST` /auth      | Authentication | Connect and get an api key |
 | `GET` /tasks      | Task      |   Get latest taks |
 | `GET` /tasks/{id} | Task      |    Get a task by given id |
 | `POST` /tasks | Task      |    Create a task |

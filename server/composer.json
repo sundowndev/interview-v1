@@ -5,7 +5,7 @@
   "license": "WTFPL",
   "require": {
     "bramus/router": "~1.3",
-    "josegonzalez/dotenv": "~3.2.0"
+    "codervio/envmanager": "^1.7"
   },
   "autoload": {
     "psr-4": {
