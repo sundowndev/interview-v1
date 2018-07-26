@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Repository\SessionRepository;
+
 /**
  * Class Session
  * @package App\Service
@@ -9,6 +11,7 @@ namespace App\Service;
 class Session
 {
     private $db;
+    private $sessionRepository;
     public $security;
 
     /**
@@ -18,23 +21,7 @@ class Session
     {
         $this->db = $database;
         $this->security = new Security($this, $jsonResponse);
-    }
-
-    /**
-     * @param $user_id
-     * @param $csrf
-     * @param $cookie
-     */
-    public function create($user_id)
-    {
-        $token = $this->security->generateToken();
-        $expire_at = new \DateTime();
-
-        $stmt = $this->db->getConnection()->prepare('INSERT INTO Session (user_id, token, issued_at, expire_at) VALUES(:user_id, :token, NOW(), :expire_at)');
-        $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
-        $stmt->bindParam(':token', $token, \PDO::PARAM_STR);
-        $stmt->bindParam(':expire_at', $expire_at);
-        $stmt->execute();
+        $this->sessionRepository = new SessionRepository($this->db, $this->security);
     }
 
     /**
@@ -54,5 +41,13 @@ class Session
         } else {
             return $session;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getUser()
+    {
+        return $this->sessionRepository->findUserBySessionToken($this->security->getBearerToken());
     }
 }

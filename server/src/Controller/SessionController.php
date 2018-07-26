@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use App\Service\Database;
 use App\Service\JsonResponse;
@@ -12,6 +13,7 @@ class SessionController
 {
     private $db;
     private $jsonResponse;
+    private $sessionRepository;
     private $request;
     private $session;
     private $security;
@@ -24,6 +26,7 @@ class SessionController
         $this->jsonResponse = new JsonResponse();
         $this->session = new Session($this->db, $this->jsonResponse);
         $this->security = $this->session->security;
+        $this->sessionRepository = new SessionRepository($this->db, $this->security);
         $this->userRepository = new UserRepository($this->db);
     }
 
@@ -32,69 +35,89 @@ class SessionController
      */
     public function auth()
     {
-        $content = $this->request->getContentAsArray();
+        $body = $this->request->getContent()->jsonToArray();
 
-        if (empty($content['username']) || empty($content['password'])) {
+        if (empty($body['username']) || empty($body['password'])) {
             print $this->jsonResponse->create(400, 'Please provide an username and password.');
             exit();
         }
 
-        $user = $this->userRepository->findOneByUsername($content['username']);
+        $user = $this->userRepository->findOneByUsername($body['username']);
 
-        if (!$this->security->passwordVerify($content['password'], $user['password'])) {
+        if (is_null($user) || !$this->security->passwordVerify($body['password'], $user['password'])) {
             print $this->jsonResponse->create(403, 'Bad credentials.');
             exit();
         }
 
-        $token = $this->security->generateToken();
+        $token = $this->security->generateToken($user['id']);
 
         $expire_at = new \DateTime();
-        $expire_at->add(new \DateInterval('P1D')); // Expire in 1 day
+        $expire_at->modify('+1 Day'); // Expire in 1 day
 
-        $stmt = $this->db->getConnection()->prepare('INSERT INTO Session (`user_id`, `token`, `issued_at`, `expire_at`) VALUES(:user_id, :token, NOW(), :expire_at)');
-        $stmt->bindParam(':user_id', $user['id']);
-        $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':expire_at', date_format($expire_at, 'Y-m-d'));
-        $stmt->execute();
+        $this->sessionRepository->create($user['id'], $token, $expire_at->format('Y-m-d H:i:s'));
 
         print $this->jsonResponse->create(200, 'Welcome ' . $user['name'], [
-            'jwt_token' => $token,
+            'token' => $token,
             'expire_at' => $expire_at,
         ]);
     }
 
-    /**
+    /**db
      * Register route
      */
     public function signup()
     {
-        $content = json_decode(trim(file_get_contents("php://input")), true);
+        $body = $this->request->getContent()->jsonToArray();
 
-        if (empty($content['username']) || empty($content['email']) || empty($content['password'])) {
+        if (empty($body['username']) || empty($body['email']) || empty($body['password'])) {
             print $this->jsonResponse->create(400, 'Please provide an username, email and password.');
             exit();
         }
 
         $user = [
-            'username' => $content['username'],
-            'email' => $content['email'],
-            'password' => $this->security->passwordHash($content['password']),
+            'username' => $body['username'],
+            'email' => $body['email'],
+            'password' => $this->security->passwordHash($body['password']),
         ];
 
-        $stmt = $this->db->getConnection()->prepare('INSERT INTO User (`name`, `email`, `password`) VALUES(:name, :email, :password)');
-        $stmt->bindParam(':name', $user['username']);
-        $stmt->bindParam(':email', $user['email']);
-        $stmt->bindParam(':password', $user['password']);
-        $stmt->execute();
+        if (!is_null($this->userRepository->findOneByEmail($user['email']))) {
+            print $this->jsonResponse->create(403, 'Email already registered!');
+            exit();
+        }
 
-        print $this->jsonResponse->create(200, 'Success! Now send your credentials to /auth to sign in.', [
+        $this->userRepository->create($user['username'], $user['email'], $user['password']);
+
+        print $this->jsonResponse->create(200, 'Success. Now send your credentials to /auth to sign in.', [
             'username' => $user['username'],
             'email' => $user['email'],
         ]);
     }
 
+    /**
+     * Signout
+     */
     public function signout()
     {
-        // logout
+        if (!$this->security->isLogged()) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
+
+        $this->sessionRepository->deleteByToken($this->security->getBearerToken());
+
+        print $this->jsonResponse->create(200, 'Good bye.', []);
+    }
+
+    /**
+     * Whois route
+     */
+    public function me()
+    {
+        if (!$this->security->isLogged()) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
+
+        print $this->jsonResponse->create(200, 'hello!', $this->session->getUser());
     }
 }
