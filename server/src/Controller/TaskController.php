@@ -74,9 +74,9 @@ class TaskController
             exit();
         }
 
-        $content = $this->request->getContentAsArray();
+        $body = $this->request->getContent()->jsonToArray();
 
-        if (empty($content['title']) || empty($content['description'])) {
+        if (empty($body['title']) || empty($body['description'])) {
             $code = 400;
             $message = 'Bad parameters.';
 
@@ -84,10 +84,12 @@ class TaskController
             exit();
         }
 
+        $user = $this->session->getUser();
+
         $task = $this->repository->create([
-            'user_id' => 1,
-            'title' => $content['title'],
-            'description' => $content['description'],
+            'user_id' => $user['id'],
+            'title' => $body['title'],
+            'description' => $body['description'],
             'status' => 1
         ]);
 
@@ -106,9 +108,30 @@ class TaskController
      */
     public function put($id)
     {
+        if (!$this->security->isLogged()) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
+
+        $task = $this->repository->findOneById($id);
+        $user = $this->session->getUser();
+
+        if ($task['user_id'] !== $user['id']) {
+            print $this->security->NotAllowedRequest();
+            exit();
+        }
+
+        $body = $this->request->getContent()->jsonToArray();
+
+        $task = $this->repository->updateById($id, [
+            'title' => $body['title'] ?? $task['title'],
+            'description' => $body['description'] ?? $task['description'],
+            'status' => $body['status'] ?? $task['status']
+        ]);
+
         $code = 200;
-        $message = "";
-        $data = [];
+        $message = "Task edited.";
+        $data = $task;
 
         print $this->jsonResponse->create($code, $message, $data);
     }
@@ -127,8 +150,9 @@ class TaskController
         }
 
         $task = $this->repository->findOneById($id);
+        $user = $this->session->getUser();
 
-        if ($task['user_id'] !== 1) {
+        if ($task['user_id'] !== $user['id']) {
             print $this->security->NotAllowedRequest();
             exit();
         }

@@ -57,6 +57,10 @@ class UserRepository
         }
     }
 
+    /**
+     * @param $username
+     * @return null
+     */
     public function findOneByUsername($username)
     {
         $stmt = $this->db->getConnection()->prepare('SELECT * FROM ' . $this->tableName . ' WHERE name = :username');
@@ -70,5 +74,38 @@ class UserRepository
         } else {
             return $user;
         }
+    }
+
+    /**
+     * @param $email
+     * @return null
+     */
+    public function findOneByEmail($email)
+    {
+        $stmt = $this->db->getConnection()->prepare('SELECT * FROM ' . $this->tableName . ' WHERE email = :email');
+        $stmt->bindParam(':email', $email, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return null;
+        } else {
+            return $user;
+        }
+    }
+
+    /**
+     * @param $username
+     * @param $email
+     * @param $password
+     */
+    public function create($username, $email, $password)
+    {
+        $stmt = $this->db->getConnection()->prepare('INSERT INTO ' . $this->tableName . ' (`name`, `email`, `password`) VALUES(:name, :email, :password)');
+        $stmt->bindParam(':name', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $password);
+        $stmt->execute();
     }
 }
