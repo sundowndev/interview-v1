@@ -1,8 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+let webpack = require('webpack');
+let path = require('path');
+let fs = require('fs');
 
-var nodeModules = {};
+let nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(function (x) {
         return ['.bin'].indexOf(x) === -1;
@@ -33,5 +33,9 @@ module.exports = {
     node: {
         __filename: true,
         __dirname: true
+    },
+    watchOptions: {
+        ignored: /node_modules/,
+        poll: 2000 // Check for changes every second
     }
 };

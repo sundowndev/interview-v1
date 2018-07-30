@@ -7,11 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:prod": "webpack --config webpack.config.prod.js",
     "build:dev": "webpack --config webpack.config.js",
-    "watch": "webpack-watch-server --config webpack.config.js"
+    "dev": "tsc-watch src/index.ts --outDir ./dist --onSuccess 'node ./dist/index.js' --onFailure 'echo Beep! Compilation Failed'"
   },
   "author": "Dr. Patrick Bartsch",
   "license": "MIT",
   "devDependencies": {
+    "tsc-watch": "^1.0.26",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
   },
@@ -20,7 +21,6 @@
     "express": "^4.16.2",
     "ts-loader": "^3.2.0",
     "twig": "^1.12.0",
-    "typescript": "^2.6.2",
-    "webpack-watch-server": "^1.2.1"
+    "typescript": "^2.6.2"
   }
 }

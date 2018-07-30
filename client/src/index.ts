@@ -7,9 +7,18 @@ let app: express.Application = express();
 
 app.set('view engine', 'twig');
 app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + 'public'));
 
 app.get('/', (req: Request, res: Response) => {
-    res.render('index', {title: 'Hey', message: 'Hello there!'});
+    res.render('index');
+});
+
+app.get('/login', (req: Request, res: Response) => {
+    res.render('login');
+});
+
+app.get('/register', (req: Request, res: Response) => {
+    res.render('register');
 });
 
 app.get('/task/{id}', (req: Request, res: Response) => {
