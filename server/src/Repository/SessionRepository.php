@@ -81,12 +81,13 @@ class SessionRepository
      * @param $csrf
      * @param $cookie
      */
-    public function create($user_id, $token, $expiration)
+    public function create($user_id, $token, $expiration, $ip)
     {
-        $stmt = $this->db->getConnection()->prepare('INSERT INTO Session (`user_id`, `token`, `issued_at`, `expire_at`) VALUES(:user_id, :token, NOW(), :expire_at)');
+        $stmt = $this->db->getConnection()->prepare('INSERT INTO Session (`user_id`, `token`, `issued_at`, `expire_at`, `ip_address`) VALUES(:user_id, :token, NOW(), :expire_at, :ip_address)');
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':token', $token);
         $stmt->bindParam(':expire_at', $expiration);
+        $stmt->bindParam(':ip_address', $ip);
         $stmt->execute();
     }
 
