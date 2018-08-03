@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>{% block title %}Project manager{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.1/examples/offcanvas/offcanvas.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+{% block header %}
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand mr-auto mr-lg-0" href="/">Project manager</a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--<div class="nav-scroller bg-white box-shadow">
+        <nav class="nav nav-underline">
+            <a class="nav-link" href="#">Tasks</a>
+            <a class="nav-link" href="#">Users</a>
+        </nav>
+    </div>-->
+
+    <div id="advert"></div>
+{% endblock %}
+
+{% block body %}
+    <main role="main" class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-info rounded box-shadow">
+            <img class="mr-3" src="https://image.flaticon.com/icons/svg/138/138839.svg" alt="" width="48" height="48">
+            <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100">Task manager</h6>
+                <small>https://github.com/Sundowndev/interview-v1</small>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(".close").on('click', () => {
+            $(".close").alert('close');
+        });
+
+        const api_url = 'http://localhost:8000';
+
+        function sendRequest(method, url, data, callback) {
+            let request = new XMLHttpRequest();
+            request.open(method, api_url + url);
+            request.setRequestHeader('Accept', 'application/json');
+            request.responseType = 'json';
+            request.onload = function () {
+                if (callback) callback(request.response);
+            };
+            request.send(data);
+        }
+
+        function setAdvert(message) {
+            $('#advert').html('<div class="alert alert-primary alert-dismissible fade show" role="alert">\n' +
+                '        ' + message +
+                '        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
+                '            <span aria-hidden="true">&times;</span>\n' +
+                '        </button>\n' +
+                '    </div>');
+        }
+    </script>
+{% endblock %}
+</body>
+</html>
