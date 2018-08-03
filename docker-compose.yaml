@@ -46,6 +46,5 @@ services:
   # For development purposes
   adminer:
     image: adminer
-    restart: always
     ports:
       - 8080:8080
