@@ -2,33 +2,21 @@
 
 namespace App\Controller;
 
-use App\Service\JsonResponse;
-use App\Service\Database;
 use App\Repository\TaskRepository;
-use App\Service\Request;
-use App\Service\Session;
 
 /**
  * Class TaskController
  * @package App\Controller
  */
-class TaskController
+class TaskController extends Controller
 {
-    private $db;
-    private $request;
-    private $jsonResponse;
-    private $session;
-    private $security;
     private $repository;
 
     public function __construct()
     {
-        $this->db = new Database();
-        $this->request = new Request();
-        $this->jsonResponse = new JsonResponse();
+        parent::__construct();
+
         $this->repository = new TaskRepository($this->db);
-        $this->session = new Session($this->db, $this->jsonResponse);
-        $this->security = $this->session->security;
     }
 
     /**
@@ -43,7 +31,7 @@ class TaskController
         $message = "Here are the tasks!";
         $data = $this->repository->findAll();
 
-        print $this->jsonResponse->create($code, $message, $data);
+        return $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -58,7 +46,7 @@ class TaskController
         $code = ($data != null) ? 200 : 404;
         $message = ($data != null) ? "Task found." : "Task not found.";
 
-        print $this->jsonResponse->create($code, $message, $data);
+        return $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -70,8 +58,7 @@ class TaskController
     public function post()
     {
         if (!$this->security->isLogged()) {
-            print $this->security->NotAllowedRequest();
-            exit();
+            return $this->security->NotAllowedRequest();
         }
 
         $body = $this->request->getContent()->jsonToArray();
@@ -80,8 +67,7 @@ class TaskController
             $code = 400;
             $message = 'Bad parameters.';
 
-            print $this->jsonResponse->create($code, $message);
-            exit();
+            return $this->jsonResponse->create($code, $message);
         }
 
         $user = $this->session->getUser();
@@ -97,7 +83,7 @@ class TaskController
         $message = 'Success!';
         $data = $task;
 
-        print $this->jsonResponse->create($code, $message, $data);
+        return $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -109,16 +95,14 @@ class TaskController
     public function put($id)
     {
         if (!$this->security->isLogged()) {
-            print $this->security->NotAllowedRequest();
-            exit();
+            return $this->security->NotAllowedRequest();
         }
 
         $task = $this->repository->findOneById($id);
         $user = $this->session->getUser();
 
         if ($task['user_id'] !== $user['id']) {
-            print $this->security->NotAllowedRequest();
-            exit();
+            return $this->security->NotAllowedRequest();
         }
 
         $body = $this->request->getContent()->jsonToArray();
@@ -133,7 +117,7 @@ class TaskController
         $message = "Task edited.";
         $data = $task;
 
-        print $this->jsonResponse->create($code, $message, $data);
+        return $this->jsonResponse->create($code, $message, $data);
     }
 
     /**
@@ -145,16 +129,14 @@ class TaskController
     public function delete($id)
     {
         if (!$this->security->isLogged()) {
-            print $this->security->NotAllowedRequest();
-            exit();
+            return $this->security->NotAllowedRequest();
         }
 
         $task = $this->repository->findOneById($id);
         $user = $this->session->getUser();
 
         if ($task['user_id'] !== $user['id']) {
-            print $this->security->NotAllowedRequest();
-            exit();
+            return $this->security->NotAllowedRequest();
         }
 
         $this->repository->deleteById($id);
@@ -163,6 +145,6 @@ class TaskController
         $message = "Task deleted.";
         $data = [];
 
-        print $this->jsonResponse->create($code, $message, $data);
+        return $this->jsonResponse->create($code, $message, $data);
     }
 }

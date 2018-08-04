@@ -8,7 +8,7 @@ namespace App\Service;
  */
 class JsonResponse
 {
-    public function create(int $code, string $message = null, array $data = [])
+    public function create(int $code, string $message = null, array $data = []): ?string
     {
         $response = [
             'code' => $code,
@@ -16,11 +16,16 @@ class JsonResponse
             'data' => $data
         ];
 
-        header('Access-Control-Allow-Origin: ' . getenv('ALLOW_ORIGIN'));
+        //header('Access-Control-Allow-Origin: ' . getenv('ALLOW_ORIGIN'));
+        header("Access-Control-Allow-Origin: http://localhost:3000");
+        header("Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization");
+        header("Access-Control-Allow-Credentials: true");
+        header('Access-Control-Max-Age: 1');
         header('Accept: application/json');
         header('Content-Type: application/json');
         http_response_code($code);
 
-        return json_encode($response);
+        print json_encode($response);
+        exit();
     }
 }

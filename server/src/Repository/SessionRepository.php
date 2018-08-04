@@ -30,7 +30,7 @@ class SessionRepository
      * TaskRepository constructor.
      * @param $db
      */
-    public function __construct($db, Security $security)
+    public function __construct(Database $db, Security $security)
     {
         $this->db = $db;
         $this->security = $security;

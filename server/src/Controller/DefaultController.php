@@ -2,23 +2,14 @@
 
 namespace App\Controller;
 
-use App\Service\JsonResponse;
-
-class DefaultController
+class DefaultController extends Controller
 {
-    private $jsonResponse;
-
-    public function __construct()
-    {
-        $this->jsonResponse = new JsonResponse();
-    }
-
     /**
      * API homepage
      */
     public function index()
     {
-        print $this->jsonResponse->create(200, 'Hello! :)');
+        return $this->jsonResponse->create(200, 'Hello! :)');
     }
 
     /**
@@ -26,6 +17,6 @@ class DefaultController
      */
     public function error()
     {
-        print $this->jsonResponse->create(404, 'Resource not found.');
+        return $this->jsonResponse->create(404, 'Resource not found.');
     }
 }
