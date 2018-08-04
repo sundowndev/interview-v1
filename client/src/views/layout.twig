@@ -24,7 +24,7 @@
         </button>
 
         <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto menu">
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Sign in</a>
                 </li>
@@ -58,36 +58,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-
-    <script>
-        $(".close").on('click', () => {
-            $(".close").alert('close');
-        });
-
-        const api_url = 'http://localhost:8000';
-
-        function sendRequest(method, url, data, callback) {
-            let request = new XMLHttpRequest();
-            request.open(method, api_url + url);
-            request.setRequestHeader('Accept', 'application/json');
-            request.responseType = 'json';
-            request.onload = function () {
-                if (callback) callback(request.response);
-            };
-            request.send(data);
-        }
-
-        function setAdvert(message) {
-            $('#advert').html('<div class="alert alert-primary alert-dismissible fade show" role="alert">\n' +
-                '        ' + message +
-                '        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                '            <span aria-hidden="true">&times;</span>\n' +
-                '        </button>\n' +
-                '    </div>');
-        }
-    </script>
+    <script src="/app.js"></script>
 {% endblock %}
 </body>
 </html>

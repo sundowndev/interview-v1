@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //import * as bodyParser from "body-parser";
 const express = require("express");
 const http = require("http");
+let path = require("path");
 let app = express();
 app.set('view engine', 'twig');
 app.set('views', __dirname + '/views');
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(path.resolve(__dirname) + '/../dist/public/'));
 app.get('/', (req, res) => {
     res.render('index');
 });

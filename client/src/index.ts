@@ -3,11 +3,13 @@ import * as express from "express";
 import {Request, Response} from "express";
 import * as http from 'http';
 
+let path = require("path");
+
 let app: express.Application = express();
 
 app.set('view engine', 'twig');
 app.set('views', __dirname + '/views');
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(path.resolve(__dirname)+'/../dist/public/'));
 
 app.get('/', (req: Request, res: Response) => {
     res.render('index');

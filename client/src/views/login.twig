@@ -18,18 +18,3 @@
         </div>
     </main>
 {% endblock %}
-
-{% block scripts %}
-    {{ parent() }}
-
-    <script>
-        $('#signin').click(function (e) {
-            sendRequest('POST', '/auth', {
-                username: 'test',
-                password: 'test'
-            }, function (res) {
-                console.log(res);
-            });
-        });
-    </script>
-{% endblock %}
