@@ -4,6 +4,7 @@
   "type": "project",
   "license": "WTFPL",
   "require": {
+    "php": "7.1",
     "bramus/router": "~1.3",
     "codervio/envmanager": "^1.7"
   },
