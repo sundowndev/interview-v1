@@ -64,7 +64,7 @@ class UserRepository
     public function findOneByUsername($username)
     {
         $stmt = $this->db->getConnection()->prepare('SELECT * FROM ' . $this->tableName . ' WHERE name = :username');
-        $stmt->bindParam(':username', $username, \PDO::PARAM_INT);
+        $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
         $stmt->execute();
 
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -83,7 +83,7 @@ class UserRepository
     public function findOneByEmail($email)
     {
         $stmt = $this->db->getConnection()->prepare('SELECT * FROM ' . $this->tableName . ' WHERE email = :email');
-        $stmt->bindParam(':email', $email, \PDO::PARAM_INT);
+        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
 
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -103,9 +103,9 @@ class UserRepository
     public function create($username, $email, $password)
     {
         $stmt = $this->db->getConnection()->prepare('INSERT INTO ' . $this->tableName . ' (`name`, `email`, `password`) VALUES(:name, :email, :password)');
-        $stmt->bindParam(':name', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':name', $username, \PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, \PDO::PARAM_STR);
         $stmt->execute();
     }
 }

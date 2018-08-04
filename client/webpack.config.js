@@ -1,8 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+let webpack = require('webpack');
+let path = require('path');
+let fs = require('fs');
 
-var nodeModules = {};
+let nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(function (x) {
         return ['.bin'].indexOf(x) === -1;
@@ -11,11 +11,26 @@ fs.readdirSync('node_modules')
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
-module.exports = {
-    entry: './src/index.ts',
+const scriptConfig = {
+    name: 'app',
+    entry: {
+        app: './src/assets/app.js'
+    },
+    target: 'web',
+    output: {
+        filename: 'app.js',
+        path: path.resolve(__dirname, 'dist/public')
+    },
+};
+
+const appConfig = {
+    name: 'index',
+    entry: {
+        index: './src/index.ts',
+    },
     target: 'node',
     output: {
-        filename: 'index.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
     devtool: 'source-map',
@@ -35,3 +50,5 @@ module.exports = {
         __dirname: true
     }
 };
+
+module.exports = [scriptConfig, appConfig];

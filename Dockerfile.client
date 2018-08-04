@@ -1,28 +1,20 @@
-FROM node:9.3.0-alpine
+FROM node:8
 
-# install static server
-RUN npm install -g serve
+# Create app directory
+WORKDIR /usr/src/app
 
-# create a 'tmp' folder for the build and make it the current working directory
-WORKDIR /app/tmp
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY ./client/package*.json ./
 
-# copy only the package.json to take advantage of cached Docker layers
-COPY package.json .
-
-# install project dependencies
 RUN npm install
+# If you are building your code for production
+# RUN npm install --only=production
 
-# copy project files and folders to the working directory
-COPY . .
+# Bundle app source
+COPY ./client .
 
-# build for production with minification
-RUN npm run build
-
-# make the 'app' folder the current working directory
-WORKDIR /app
-
-# clean up (i.e. extract 'dist' folder and remove everything else)
-RUN mv tmp/dist dist && rm -fr tmp
-
-EXPOSE 5000
-CMD [ "serve", "--single", "--port", "3000", "dist" ]
+EXPOSE 3000
+RUN npm run build:dev
+CMD ["node", "dist/index.js"]

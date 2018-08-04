@@ -3,21 +3,17 @@
 namespace App\Controller;
 
 use App\Repository\TaskRepository;
-use App\Service\Database;
-use App\Service\JsonResponse;
 use App\Repository\UserRepository;
 
-class UserController
+class UserController extends Controller
 {
-    private $db;
-    private $jsonResponse;
     private $repository;
     private $taskRepository;
 
     public function __construct()
     {
-        $this->db = new Database();
-        $this->jsonResponse = new JsonResponse();
+        parent::__construct();
+
         $this->repository = new UserRepository($this->db);
         $this->taskRepository = new TaskRepository($this->db);
     }
@@ -34,7 +30,7 @@ class UserController
         $code = ($user != null) ? 200 : 404;
         $message = ($user != null) ? "User found." : "User not found.";
 
-        print $this->jsonResponse->create($code, $message, [
+        return $this->jsonResponse->create($code, $message, [
             'id' => $user['id'],
             'username' => $user['name'],
             'email' => $user['email'],
@@ -49,12 +45,11 @@ class UserController
             $code = ($data != null) ? 200 : 404;
             $message = ($data != null) ? "User found." : "User not found.";
 
-            print $this->jsonResponse->create($code, $message, []);
-            exit();
+            return $this->jsonResponse->create($code, $message, []);
         }
 
         $tasks = $this->taskRepository->findByUserId($id);
 
-        print $this->jsonResponse->create(200, 'Here are the tasks.', $tasks);
+        return $this->jsonResponse->create(200, 'Here are the tasks.', $tasks);
     }
 }
