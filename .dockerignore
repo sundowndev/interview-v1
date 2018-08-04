@@ -7,3 +7,5 @@
 .dockerignore
 Dockerfile
 docker-compose.yaml
+/node_modules/
+/npm-debug.log/
