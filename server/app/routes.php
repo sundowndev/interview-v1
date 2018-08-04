@@ -6,6 +6,8 @@ use App\Service\JsonResponse;
 $router->setNamespace('\App\Controller');
 
 $router->before('GET|POST|PUT|DELETE', '/.*', function () use ($router) {
+    date_default_timezone_set('Europe/Paris');
+
     # This will be always executed
     $dotEnvParser = new DotEnvParser();
     $dotEnvParser->run();
@@ -15,19 +17,12 @@ $router->before('GET|POST|PUT|DELETE', '/.*', function () use ($router) {
     if ($_SERVER['HTTP_ACCEPT'] !== 'application/json') {
         $code = 400;
         $message = 'Accept header is not set to "application/json".';
-        print $jsonResponse->create($code, $message, []);
-        exit();
+        return $jsonResponse->create($code, $message, []);
     } elseif ($_SERVER['REQUEST_METHOD'] != 'GET' && $_SERVER['CONTENT_TYPE'] !== 'application/json') {
         $code = 400;
         $message = 'Content-type header is not set to "application/json".';
-        print $jsonResponse->create($code, $message, []);
-        exit();
-    }/* elseif ($_SERVER['HTTP_ORIGIN'] !== getenv('ALLOW_ORIGIN')) {
-        $code = 403;
-        $message = 'Unallowed origin.';
-        print $jsonResponse->create($code, $message, []);
-        exit();
-    }*/
+        return $jsonResponse->create($code, $message, []);
+    }
 });
 
 /**
@@ -78,3 +73,6 @@ $router->mount('/users', function () use ($router) {
     // Get one task's tasks
     $router->get('/(\d+)/tasks', 'UserController@getTasks');
 });
+
+// Quickfix for Chrome prelight request on OPTIONS method
+$router->options('(.*)', 'DefaultController@index');
