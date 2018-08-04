@@ -11,11 +11,26 @@ fs.readdirSync('node_modules')
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
-module.exports = {
-    entry: './src/index.ts',
+const scriptConfig = {
+    name: 'app',
+    entry: {
+        app: './src/assets/app.js'
+    },
+    target: 'web',
+    output: {
+        filename: 'app.js',
+        path: path.resolve(__dirname, 'dist/public')
+    },
+};
+
+const appConfig = {
+    name: 'index',
+    entry: {
+        index: './src/index.ts',
+    },
     target: 'node',
     output: {
-        filename: 'index.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
     devtool: 'source-map',
@@ -33,9 +48,7 @@ module.exports = {
     node: {
         __filename: true,
         __dirname: true
-    },
-    watchOptions: {
-        ignored: /node_modules/,
-        poll: 2000 // Check for changes every second
     }
 };
+
+module.exports = [scriptConfig, appConfig];
