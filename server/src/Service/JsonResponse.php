@@ -17,7 +17,7 @@ class JsonResponse
         ];
 
         //header('Access-Control-Allow-Origin: ' . getenv('ALLOW_ORIGIN'));
-        header("Access-Control-Allow-Origin: http://localhost:3000");
+        header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization");
         header("Access-Control-Allow-Credentials: true");
         header('Access-Control-Max-Age: 1');
