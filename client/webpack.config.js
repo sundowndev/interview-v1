@@ -14,7 +14,7 @@ fs.readdirSync('node_modules')
 const scriptConfig = {
     name: 'app',
     entry: {
-        app: './src/assets/app.js'
+        app: './src/app.js'
     },
     target: 'web',
     output: {
@@ -23,32 +23,4 @@ const scriptConfig = {
     },
 };
 
-const appConfig = {
-    name: 'index',
-    entry: {
-        index: './src/index.ts',
-    },
-    target: 'node',
-    output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    devtool: 'source-map',
-    resolve: {
-        // Add `.ts` and `.tsx` as a resolvable extension.
-        extensions: ['.ts', '.tsx', '.js']
-    },
-    module: {
-        rules: [
-            // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-            {test: /\.tsx?$/, loader: 'ts-loader'}
-        ]
-    },
-    externals: nodeModules,
-    node: {
-        __filename: true,
-        __dirname: true
-    }
-};
-
-module.exports = [scriptConfig, appConfig];
+module.exports = [scriptConfig];
